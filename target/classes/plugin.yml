@@ -1,0 +1,13 @@
+name: GSMG_Base
+main: gsmg.plugin.gsmg_base.gsmg_base_main
+version: 0.0.1-snapshot
+authors: [Gorea235, SteelArts]
+commands:
+    gsmg:
+        description: The main command of the plugin
+        usage: /<command> <option> [args]
+        permission: gsmg.*
+        permission-message: You do not have permission to use this command.
+permissions:
+    gsmg.*:
+        description: The only permission for this plugin, allows all commands/arguents.
