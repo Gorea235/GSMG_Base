@@ -4,11 +4,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class gsmg_base_main extends JavaPlugin {
+	public static String pluginPrefix = "[GSMG] ";
+	
 	public void broadcastMessage(String msg) {
-		Bukkit.broadcastMessage("[GSMG - Hunger Games] " + msg);
+		Bukkit.broadcastMessage(pluginPrefix + msg);
+	}
+	
+	public static void Log(String toLog) {
+		Log(toLog, false);
 	}
 
-	public static void Log(String toLog) {
+	public static void Log(String toLog, Boolean noPrefix) {
+		if (!noPrefix) {
+			toLog = pluginPrefix + toLog;
+		}
 		Bukkit.getLogger().info(toLog);
 	}
 
