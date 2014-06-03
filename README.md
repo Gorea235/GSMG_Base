@@ -26,3 +26,6 @@ TODO List:
 Command List:
 
     help - give information about the plugin and command to the player who typed the command
+    close - closes off a minigame from use
+    start - opens a minigame for use
+    reload - will reload the plugin selected
