@@ -21,4 +21,8 @@ TODO List:
   - [ ] Work out how lobbying will work
   - [ ] Code initial lobbying system
   - [ ] Test it, see if changes need to be made
-  - [ ] Create classes for the Lua custom classes to use 
+  - [ ] Create classes for the Lua custom classes to use
+
+Command List:
+
+    help - give information about the plugin and command to the player who typed the command
