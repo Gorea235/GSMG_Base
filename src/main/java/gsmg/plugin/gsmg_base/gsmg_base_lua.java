@@ -16,7 +16,7 @@ public class gsmg_base_lua {
 		} else {
 			for (String f : LuaDir.list()) {
 				try {
-					globals.load(f);
+					globals.loadfile("plugins/GSMG_MiniGames/" + f).call();
 				} catch (LuaError err) {
 					gsmg_base_main.Log(String.format("Error loading file '%s', reason: %s", f, err.getMessage()));
 				}
