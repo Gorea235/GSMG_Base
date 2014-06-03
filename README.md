@@ -29,3 +29,5 @@ Command List:
 - [ ] close - closes off a minigame from use
 - [ ] start - opens a minigame for use
 - [ ] reload - will reload the plugin selected
+- [ ] Lobby Create - creates lobby for the first time and adds to database
+- [ ] Lobby Remove - Removes lobby from database
