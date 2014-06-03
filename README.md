@@ -13,7 +13,7 @@ TODO List:
   - [ ] Work out how each command will work
   - [ ] Code the commands
 - [ ] Lua Addon Loading
-  - [ ] Implement LuaJ to a stage where Lua files can be loaded and run with custom classes
+  - [x] Implement LuaJ to a stage where Lua files can be loaded and run with custom classes
   - [ ] Work out what custom class need to be built for the Lua
   - [ ] Code the classes
   - [ ] Code the first addon
