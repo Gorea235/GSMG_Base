@@ -23,23 +23,4 @@ public class gsmg_base_lua {
 			}
 		}
 	}
-	
-	public class base extends TwoArgFunction {
-		
-		public base() {}
-
-		public LuaValue call(LuaValue modname, LuaValue env) {
-			LuaValue library = tableOf();
-			library.set("printout", new PrintOut());
-			return library;
-		}
-		
-		public class PrintOut extends OneArgFunction {
-			public LuaValue call(LuaValue toPrint) {
-				gsmg_base_main.Log(toPrint.tojstring());
-				return null;
-			}
-		}
-		
-	}
 }
