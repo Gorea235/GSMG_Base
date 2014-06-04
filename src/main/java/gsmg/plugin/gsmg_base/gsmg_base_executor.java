@@ -12,7 +12,7 @@ public class gsmg_base_executor implements CommandExecutor {
 		// if (sender instanceof Player) {
 		if (args.length > 0) {
 			String arg1 = args[0].toLowerCase();
-			if (arg1 == "help") {
+			if (arg1.equals("help")) {
 				sender.sendMessage("----GSMG Command List----");
 				sender.sendMessage("/GSMG Close (Minigame)");
 				sender.sendMessage("/GSMG (Minigame) (Command)");
