@@ -12,12 +12,7 @@ public class gsmg_base_executor implements CommandExecutor {
 		// if (sender instanceof Player) {
 		if (args.length > 0) {
 			String arg1 = args[0].toLowerCase();
-<<<<<<< HEAD
 			if (arg1.equals("help")) {
-=======
-			// } else if (arg1 == ("")) {
-			if (arg1 == "help") {
->>>>>>> d0c5b9790c88dce3fe3ae4095187466c77e09429
 				sender.sendMessage("----GSMG Command List----");
 				sender.sendMessage("/GSMG Close (Minigame)");
 				sender.sendMessage("/GSMG (Minigame) (Command)");
@@ -26,11 +21,13 @@ public class gsmg_base_executor implements CommandExecutor {
 				sender.sendMessage("/GSMG reloadlua");
 				sender.sendMessage("");
 			} else if (arg1.equals("close")) {
+				
 			} else if (arg1 == ("Start")) {
-			} else if (arg1 == ("Lobby Create")) {
+				
+			} else if (arg1 == ("lobby") && args[1].toLowerCase().equals("create")) {
 				gsmg_base_lobby
 				
-			} else if (arg1 == ("Lobby Remove")) {
+			} else if (arg1 == ("lobby") && args[1].toLowerCase().equals("remove")) {
 				
 			} else if (arg1.equals("reloadlua")) {
 				gsmg_base_main.Log("Reloading Lua files...");
