@@ -28,7 +28,10 @@ public class gsmg_base_executor implements CommandExecutor {
 			} else if (arg1 == ("Start")) {
 				
 			} else if (arg1 == ("lobby") && args[1].toLowerCase().equals("create")) {
-				
+				if (args.length == 0) {
+					player.sendmessage(ChatColor.RED+ "/Lobby Ceate (Lobby Name)")
+				} else {
+				gsmg_base_lobby.Create();
 			} else if (arg1 == ("lobby") && args[1].toLowerCase().equals("remove")) {
 				
 			} else if (arg1.equals("reloadlua")) {
