@@ -18,7 +18,7 @@ public static void Create() {
             lobbylocations[lobbycouter] = location;
             lobbynames[lobbycouter] = args[0];
             lobbycouter++;
-            player.sendmessage(Chatcolor.RED+ "Lobby Created As: " + args[]);
+            player.sendmessage(Chatcolor.RED+ "Lobby Created As: " + args[0]);
           }else{
             player.sendermessage(Chatcolor.RED+ "Lobby Limit Exceeded!")
           }
