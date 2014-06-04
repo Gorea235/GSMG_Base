@@ -12,6 +12,7 @@ public class gsmg_base_executor implements CommandExecutor {
 		// if (sender instanceof Player) {
 		if (args.length > 0) {
 			String arg1 = args[0].toLowerCase();
+			// } else if (arg1 == ("")) {
 			if (arg1 == "help") {
 				sender.sendMessage("----GSMG Command List----");
 				sender.sendMessage("/GSMG Close (Minigame)");
@@ -21,7 +22,12 @@ public class gsmg_base_executor implements CommandExecutor {
 				sender.sendMessage("/GSMG reloadlua");
 				sender.sendMessage("");
 			} else if (arg1.equals("close")) {
-
+			} else if (arg1 == ("Start")) {
+			} else if (arg1 == ("Lobby Create")) {
+				gsmg_base_lobby
+				
+			} else if (arg1 == ("Lobby Remove")) {
+				
 			} else if (arg1.equals("reloadlua")) {
 				gsmg_base_main.Log("Reloading Lua files...");
 				gsmg_base_lua.main();
