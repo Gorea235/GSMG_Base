@@ -4,7 +4,8 @@ package gsmg.plugin.gsmg_base;
 import org.bukkit.entity.Player;
 
 public final Location[] Lobbyloactions = new Location[100];
-public final String[] Lobbyname = new String[100]
+public final String[] Lobbyname = new String[100];
+public int LobbyCouter
 
 public class gsmg_base_lobby {
 
@@ -31,13 +32,14 @@ public static void Create() {
 
 
 //move to lobby
-for (int 1 = 0; i < lobbynames.length; i++) {
-string lobbyname = lobbynames[i]
-location lobbyLocation = lobbylocation[i]
-player.teleport(lobbylocation)
-player.sendmessage(ChatColor.GREEN+ "You Have Been Moved To the Lobby")
-break;
-
+public static void Move() {
+        for (int 1 = 0; i < lobbynames.length; i++) {
+        string lobbyname = lobbynames[i]
+        location lobbyLocation = lobbylocation[i]
+        player.teleport(lobbylocation)
+        player.sendmessage(ChatColor.GREEN+ "You Have Been Moved To the Lobby")
+        break;
+}
 // side codings timer
 
 /*this.getServer().getscheduler()
