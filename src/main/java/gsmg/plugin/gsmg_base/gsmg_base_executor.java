@@ -23,29 +23,59 @@ public class gsmg_base_executor implements CommandExecutor {
 				sender.sendMessage("/GSMG Start (Minigame)");
 				sender.sendMessage("/GSMG reload");
 				sender.sendMessage("/GSMG reloadlua");
-				sender.sendMessage("");
+				sender.sendMessage("/GSMG lobby (command) [name]");
 			} else if (arg1.equals("close")) {
-				
-			} else if (arg1 == ("Start")) {
-				
-			} else if (arg1 == ("lobby") && args[1].toLowerCase().equals("create")) {
-				if (args.length == 0) {
-					sender.sendMessage(ChatColor.RED+ "/Lobby Ceate (Lobby Name)");
+
+			} else if (arg1.equals("Start")) {
+
+			} else if (arg1.equals("lobby")) {
+				if (isPlayer) {
+					if (args.length == 3) {
+						if (args[1].toLowerCase().equals("create")) {
+							gsmg_base_lobby.Create((Player) sender,
+									args[2].toLowerCase());
+						} else if (args[1].toLowerCase().equals("remove")) {
+							gsmg_base_lobby.Remove((Player) sender,
+									args[2].toLowerCase());
+						} else if (args[1].toLowerCase().equals("teleport")) {
+							gsmg_base_lobby.TeleportPlayerToLobby(
+									(Player) sender, args[2].toLowerCase());
+						} else if (args[1].toLowerCase().equals("relocate")) {
+							gsmg_base_lobby.Relocate((Player) sender,
+									args[2].toLowerCase());
+						} else {
+							sender.sendMessage(ChatColor.RED
+									+ "/GSMG lobby (create/remove/teleport) (name)");
+						}
+					} else if (args.length == 2) {
+						if (args[1].toLowerCase().equals("list")) {
+							gsmg_base_lobby.ListLobbys((Player) sender);
+						} else {
+							sender.sendMessage(ChatColor.RED
+									+ "/GSMG lobby (create/remove/teleport/list) [name]");
+						}
+					} else {
+						sender.sendMessage(ChatColor.RED
+								+ "/GSMG lobby (create/remove/teleport/list) [name]");
+					}
 				} else {
-					gsmg_base_lobby.Create();
+					sender.sendMessage("This command is only available to players.");
 				}
-			} else if (arg1 == ("lobby") && args[1].toLowerCase().equals("remove")) {
-				
+
 			} else if (arg1.equals("reloadlua")) {
 				gsmg_base_main.Log("Reloading Lua files...");
 				gsmg_base_lua.main();
 				gsmg_base_main.Log("Reloading complete!");
-				if (isPlayer) {sender.sendMessage("Reloaded Lua files...");}
+				if (isPlayer) {
+					sender.sendMessage("Reloaded Lua files...");
+				}
 			} else {
-				return false;
+				sender.sendMessage(ChatColor.RED
+						+ "Command: /GSMG (command) [option]");
+				sender.sendMessage(ChatColor.RED
+						+ "Try '/GSMG help' for more information");
 			}
-			return true;
 		}
-		return false;
+		return true;
 	}
 }

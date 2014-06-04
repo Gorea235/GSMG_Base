@@ -2,9 +2,6 @@ package gsmg.plugin.gsmg_base;
 
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.*;
-import org.luaj.vm2.lib.*;
-
-import gsmg.plugin.gsmg_base.gsmg_lua.Lua_base;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,10 +12,12 @@ public class gsmg_base_lua {
 	static List<File> LuaFolders = new ArrayList<File>();
 	static List<File> QueuedLuaFiles = new ArrayList<File>();
 	static String LuaClassLoc = "gsmg.plugin.gsmg_base.gsmg_lua.";
-	
+
 	public static void main() {
-		globals.set("IncludePath", LuaValue.valueOf("plugins.GSMG_MiniGames.Includes."));
-		globals.set("MiniGamePath", LuaValue.valueOf("plugins.GSMG_MiniGames.MiniGames."));
+		globals.set("IncludePath",
+				LuaValue.valueOf("plugins.GSMG_MiniGames.Includes."));
+		globals.set("MiniGamePath",
+				LuaValue.valueOf("plugins.GSMG_MiniGames.MiniGames."));
 		LuaValue classes = LuaValue.tableOf();
 		classes.set("base", LuaClassLoc + "Lua_base");
 		classes.set("player", LuaClassLoc + "Lua_Player");
@@ -43,11 +42,13 @@ public class gsmg_base_lua {
 			try {
 				globals.loadfile(f.getAbsolutePath()).call();
 			} catch (LuaError err) {
-				gsmg_base_main.Log(String.format("Error loading file '%s', reason: %s", f, err.getMessage()));
+				gsmg_base_main.Log(String.format(
+						"Error loading file '%s', reason: %s", f,
+						err.getMessage()));
 			}
 		}
 	}
-	
+
 	public static void GetLuaFilesToRun(String dir) {
 		for (String f : new File(dir).list()) {
 			if (f.substring(f.length() - 4).equals(".lua")) {
