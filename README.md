@@ -5,6 +5,10 @@ The base plugin for our mini-game plugins. The other plugins will be written in 
 
 Current LuaJ Version: LuaJ-JSE 2.0.3
 
+[Top jar folder](/src/main/java)
+
+[Java files](/src/main/java/gsmg/plugin/gsmg_base)
+
 TODO List:
 
 - [ ] Commands
