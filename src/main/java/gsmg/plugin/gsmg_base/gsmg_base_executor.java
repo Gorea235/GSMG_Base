@@ -9,7 +9,10 @@ public class gsmg_base_executor implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
-		// if (sender instanceof Player) {
+		boolean isPlayer = false;
+		if (sender instanceof Player) {
+			isPlayer = true;
+		}
 		if (args.length > 0) {
 			String arg1 = args[0].toLowerCase();
 			if (arg1.equals("help")) {
@@ -25,7 +28,6 @@ public class gsmg_base_executor implements CommandExecutor {
 			} else if (arg1 == ("Start")) {
 				
 			} else if (arg1 == ("lobby") && args[1].toLowerCase().equals("create")) {
-				gsmg_base_lobby
 				
 			} else if (arg1 == ("lobby") && args[1].toLowerCase().equals("remove")) {
 				
@@ -33,15 +35,12 @@ public class gsmg_base_executor implements CommandExecutor {
 				gsmg_base_main.Log("Reloading Lua files...");
 				gsmg_base_lua.main();
 				gsmg_base_main.Log("Reloading complete!");
+				if (isPlayer) {sender.sendMessage("Reloaded Lua files...");}
 			} else {
 				return false;
 			}
 			return true;
 		}
 		return false;
-		// } else {
-		// sender.sendMessage("The console cannot use these commands.");
-		// return true;
-		// }
 	}
 }
