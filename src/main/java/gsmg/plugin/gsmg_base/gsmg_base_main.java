@@ -23,6 +23,7 @@ public class gsmg_base_main extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		getServer().getPluginManager().registerEvents(new gsmg_base_events(), this);
 		getCommand("gsmg").setExecutor(new gsmg_base_executor());
 		Log("Luaj Version: " + org.luaj.vm2.Lua._VERSION);
 		gsmg_base_lua.main();
