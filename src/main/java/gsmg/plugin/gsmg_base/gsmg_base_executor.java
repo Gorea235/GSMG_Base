@@ -26,7 +26,7 @@ public class gsmg_base_executor implements CommandExecutor {
 				sender.sendMessage("/GSMG lobby (command) [name]");
 			} else if (arg1.equals("close")) {
 
-			} else if (arg1.equals("Start")) {
+			} else if (arg1.equals("start")) {
 
 			} else if (arg1.equals("lobby")) {
 				if (isPlayer) {

@@ -3,6 +3,8 @@ package gsmg.plugin.gsmg_base;
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.*;
 
+import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Base;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +21,13 @@ public class gsmg_base_lua {
 		globals.set("MiniGamePath",
 				LuaValue.valueOf("plugins.GSMG_MiniGames.MiniGames."));
 		LuaValue classes = LuaValue.tableOf();
-		classes.set("base", LuaClassLoc + "Lua_base");
+		classes.set("base", LuaClassLoc + "Lua_Base");
 		classes.set("player", LuaClassLoc + "Lua_Player");
+		classes.set("location", LuaClassLoc + "Lua_Location");
+		classes.set("event", LuaClassLoc + "Lua_Event");
+		classes.set("minigame", LuaClassLoc + "Lua_Minigame");
 		globals.set("class", classes);
+		globals.set("print", new Lua_Base.PrintOut());
 		LuaFolders.clear();
 		LuaFolders.add(new File("plugins/GSMG_MiniGames"));
 		LuaFolders.add(new File("plugins/GSMG_MiniGames/MiniGames"));
@@ -55,5 +61,9 @@ public class gsmg_base_lua {
 				QueuedLuaFiles.add(new File(dir + "/" + f));
 			}
 		}
+	}
+	
+	public static String toString(LuaValue var) {
+		return globals.get("tostring").call(var).tojstring();
 	}
 }
