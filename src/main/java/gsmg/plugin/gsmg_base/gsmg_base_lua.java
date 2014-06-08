@@ -4,6 +4,7 @@ import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.*;
 
 import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Base;
+import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Minigame.minigames;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,6 +30,10 @@ public class gsmg_base_lua {
 		globals.set("class", classes);
 		globals.set("print", new Lua_Base.PrintOut());
 		LuaFolders.clear();
+		QueuedLuaFiles.clear();
+		minigames.globals.clear();
+		minigames.onCommandEvents.clear();
+		minigames.onSignClickEvents.clear();
 		LuaFolders.add(new File("plugins/GSMG_MiniGames"));
 		LuaFolders.add(new File("plugins/GSMG_MiniGames/MiniGames"));
 		LuaFolders.add(new File("plugins/GSMG_MiniGames/Includes"));
@@ -37,7 +42,6 @@ public class gsmg_base_lua {
 				f.mkdir();
 			}
 		}
-		QueuedLuaFiles.clear();
 		GetLuaFilesToRun("plugins/GSMG_MiniGames");
 		for (String d : new File("plugins/GSMG_MiniGames/MiniGames").list()) {
 			if (new File("plugins/GSMG_MiniGames/MiniGames/" + d).isDirectory()) {

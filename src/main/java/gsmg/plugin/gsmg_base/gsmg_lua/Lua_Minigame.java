@@ -24,16 +24,17 @@ public class Lua_Minigame extends TwoArgFunction {
 
 	public class registerMinigame extends OneArgFunction {
 		public LuaValue call(LuaValue name) throws LuaError {
-			if (!minigames.globals.containsKey(name)) {
-				if (name.tojstring().contains(" ")) {
+			String _name = name.tojstring().toLowerCase();
+			if (!minigames.globals.containsKey(_name)) {
+				if (_name.contains(" ")) {
 					throw new LuaError("Minigame name cannot contain a space");
 				}
-				minigames.globals.put(name.tojstring(),
+				minigames.globals.put(_name,
 						new HashMap<LuaValue, LuaValue>());
 				return new getMinigame().call(name);
 			} else {
 				throw new LuaError(String.format(
-						"Minigame '%s' already exists", name.tojstring()));
+						"Minigame '%s' already exists", _name));
 			}
 
 		}
@@ -41,7 +42,7 @@ public class Lua_Minigame extends TwoArgFunction {
 
 	public class getMinigame extends OneArgFunction {
 		public LuaValue call(LuaValue name) throws LuaError {
-			String _name = name.tojstring();
+			String _name = name.tojstring().toLowerCase();
 			if (minigames.globals.containsKey(_name)) {
 				LuaValue functions = tableOf();
 				functions.set("getVar", new minigame_getVar(_name));
@@ -65,11 +66,12 @@ public class Lua_Minigame extends TwoArgFunction {
 
 	public class unregisterMinigame extends OneArgFunction {
 		public LuaValue call(LuaValue name) throws LuaError {
-			if (minigames.globals.containsKey(name.tojstring())) {
-				minigames.globals.remove(name);
+			String _name = name.tojstring().toLowerCase();
+			if (minigames.globals.containsKey(_name)) {
+				minigames.globals.remove(_name);
 			} else {
 				throw new LuaError(String.format("Minigame '%s' doesn't exist",
-						name.tojstring()));
+						_name));
 			}
 			return LuaValue.NIL;
 		}
@@ -77,7 +79,7 @@ public class Lua_Minigame extends TwoArgFunction {
 
 	public class minigameExists extends OneArgFunction {
 		public LuaValue call(LuaValue name) {
-			if (minigames.globals.containsKey(name.tojstring())) {
+			if (minigames.globals.containsKey(name.tojstring().toLowerCase())) {
 				return LuaValue.TRUE;
 			} else {
 				return LuaValue.FALSE;
