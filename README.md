@@ -12,26 +12,26 @@ Current LuaJ Version: LuaJ-JSE 3.0-beta2
 TODO List:
 
 - [ ] Commands
-  - [ ] Write up command list
+  - [x] Write up command list
   - [ ] Implement Empty Command Functions
   - [ ] Work out how each command will work
   - [ ] Code the commands
 - [ ] Lua Addon Loading
   - [x] Implement LuaJ to a stage where Lua files can be loaded and run with custom classes
-  - [ ] Work out what custom class need to be built for the Lua
+  - [x] Work out what custom classes need to be built for the Lua
   - [ ] Code the classes
   - [ ] Code the first addon
 - [ ] Build Lobbying System
-  - [ ] Work out how lobbying will work
-  - [ ] Code initial lobbying system
+  - [x] Work out how lobbying will work
+  - [x] Code initial lobbying system
   - [ ] Test it, see if changes need to be made
   - [ ] Create classes for the Lua custom classes to use
 
 Command List:
 
-- [ ] help - give information about the plugin and command to the player who typed the command
+- [x] help - give information about the plugin and command to the player who typed the command
 - [ ] close - closes off a minigame from use
 - [ ] start - opens a minigame for use
 - [ ] reload - will reload the plugin selected
-- [ ] Lobby Create - creates lobby for the first time and adds to database
-- [ ] Lobby Remove - Removes lobby from database
+- [x] reloadlua - will reload the Lua files
+- [x] lobby - allows for lobby creation/deletion etc.
