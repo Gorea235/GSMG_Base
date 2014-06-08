@@ -15,6 +15,7 @@ public class Lua_Player extends TwoArgFunction {
 		library.set("getLocation", new getLocation());
 		library.set("exists", new exists());
 		library.set("getPlayer", new getPlayer());
+		library.set("sendMessgae", new sendMessage());
 		return library;
 	}
 
@@ -26,15 +27,14 @@ public class Lua_Player extends TwoArgFunction {
 				if (!(ply == null)) {
 					ply.teleport(Lua_Location.LocationFromLuaValue(location));
 				} else {
-					throw new LuaError(String.format(
-							"Player '%s' doesn't exist!", player.tojstring()));
+					return LuaValue.FALSE;
 				}
 			} catch (Exception ex) {
 				gsmg_base_main.Log(String.format(
 						"Could not teleport player '%s', reason: %s",
 						player.tojstring(), ex.getMessage()));
 			}
-			return LuaValue.FALSE;
+			return LuaValue.TRUE;
 		}
 	}
 
@@ -70,8 +70,7 @@ public class Lua_Player extends TwoArgFunction {
 							ex.getClass(), ex.getMessage()));
 				}
 			} else {
-				throw new LuaError(String.format("Player '%s' doesn't exist!",
-						player.tojstring()));
+				return LuaValue.NIL;
 			}
 		}
 	}
@@ -85,11 +84,23 @@ public class Lua_Player extends TwoArgFunction {
 			}
 		}
 	}
+	
+	public class sendMessage extends TwoArgFunction {
+		public LuaValue call(LuaValue player, LuaValue msg) {
+			Player ply = Bukkit.getPlayer(player.tojstring());
+			if (!(ply == null)) {
+				ply.sendMessage(msg.tojstring());
+				return LuaValue.TRUE;
+			}
+			return LuaValue.FALSE;
+		}
+	}
 
 	public class getPlayer extends OneArgFunction {
 		private Lua_Player.teleport _teleport = new Lua_Player.teleport();
 		private Lua_Player.teleportToPlayer _teleportToPlayer = new Lua_Player.teleportToPlayer();
 		private Lua_Player.getLocation _getLocation = new Lua_Player.getLocation();
+		private Lua_Player.sendMessage _sendMessage = new Lua_Player.sendMessage();
 
 		private void stillExists(LuaValue _player) throws LuaError {
 			if (Bukkit.getPlayer(_player.tojstring()) == null) {
@@ -108,6 +119,7 @@ public class Lua_Player extends TwoArgFunction {
 			functions.set("getLocation", new getLocation(player));
 			functions.set("exists", new exists(player));
 			functions.set("getName", new getName(player));
+			functions.set("sendMessage", new sendMessage(player));
 			return functions;
 		}
 
@@ -165,16 +177,29 @@ public class Lua_Player extends TwoArgFunction {
 			}
 		}
 
-		private class getLocation extends OneArgFunction {
+		private class getLocation extends ZeroArgFunction {
 			public LuaValue _player = null;
 
 			public getLocation(LuaValue player) {
 				this._player = player;
 			}
 
-			public LuaValue call(LuaValue player) {
+			public LuaValue call() {
 				stillExists(this._player);
 				return _getLocation.call(this._player);
+			}
+		}
+
+		private class sendMessage extends OneArgFunction {
+			public LuaValue _player = null;
+
+			public sendMessage(LuaValue player) {
+				this._player = player;
+			}
+
+			public LuaValue call(LuaValue msg) {
+				stillExists(this._player);
+				return _sendMessage.call(this._player, msg);
 			}
 		}
 	}
@@ -188,4 +213,6 @@ public class Lua_Player extends TwoArgFunction {
  * teleportToPlayer, args: LuaValue actionPlayer, LuaValue toPlayer
  * 
  * getLocation, args: LuaValue player
+ * 
+ * sendMessage, args: LuaValue player, LuaValue msg
  */
