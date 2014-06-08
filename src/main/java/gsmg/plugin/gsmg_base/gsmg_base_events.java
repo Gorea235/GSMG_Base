@@ -1,5 +1,7 @@
 package gsmg.plugin.gsmg_base;
 
+import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Minigame;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.*;
@@ -8,6 +10,7 @@ import org.bukkit.event.*;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
+import org.luaj.vm2.LuaValue;
 
 public class gsmg_base_events implements Listener {
 	@EventHandler
@@ -18,12 +21,20 @@ public class gsmg_base_events implements Listener {
 			if ((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)
 					&& (event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 				Sign sign = (Sign) block.getState();
-				if (sign.getLine(0).equalsIgnoreCase("[GSMG]")) {
-					if (sign.getLine(1).equalsIgnoreCase("Test")) {
-						sign.setLine(0, ChatColor.DARK_RED + "[GSMG]");
-						sign.setLine(2, ChatColor.BLUE + "Donkey");
-						sign.setLine(3, sign.getLine(3));
-						sign.update();
+				if (sign.getLine(0).equalsIgnoreCase(
+						ChatColor.DARK_GREEN + "[GMSG]")) {
+					if (sign.getLine(3).isEmpty()) {
+						gsmg_base_lobby.TeleportPlayerToLobby(player,
+								sign.getLine(1));
+					} else {
+						if (Lua_Minigame.minigames.onSignClickEvents
+								.containsKey(sign.getLine(3))) {
+							Lua_Minigame.minigames.onSignClickEvents.get(
+									sign.getLine(3)).call(
+									LuaValue.valueOf(player.getName()),
+									LuaValue.valueOf(sign.getLine(1)),
+									LuaValue.valueOf(sign.getLine(2)));
+						}
 					}
 				}
 			}
@@ -31,29 +42,51 @@ public class gsmg_base_events implements Listener {
 
 		}
 	}
-	
+
+	@EventHandler
+	public void onSignChange(SignChangeEvent sign) {
+		if (sign.getLine(0).equalsIgnoreCase("[GSMG]")) {
+			if (sign.getLine(3).isEmpty()) {
+				if (!gsmg_base_lobby.LobbyList.containsKey(sign.getLine(1))) {
+					sign.setLine(0, ChatColor.ITALIC + "" + ChatColor.DARK_RED
+							+ "#ERROR");
+				} else {
+					sign.setLine(0, ChatColor.DARK_GREEN + "[GMSG]");
+				}
+			} else {
+				if (!Lua_Minigame.minigames.globals.containsKey(sign.getLine(3)
+						.toLowerCase())) {
+					sign.setLine(0, ChatColor.ITALIC + "" + ChatColor.DARK_RED
+							+ "#ERROR");
+				} else {
+					sign.setLine(0, ChatColor.DARK_GREEN + "[GMSG]");
+				}
+			}
+		}
+	}
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		
+
 	}
-	
+
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event) {
-		
+
 	}
-	
+
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		
+
 	}
-	
+
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		
+
 	}
-	
+
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		
+
 	}
 }
