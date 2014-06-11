@@ -12,7 +12,7 @@ public class Lua_Minigame extends TwoArgFunction {
 		public static Map<String, LuaValue> onCommandEvents = new HashMap<String, LuaValue>();
 		public static Map<String, LuaValue> onSignClickEvents = new HashMap<String, LuaValue>();
 	}
-	
+
 	public LuaValue call(LuaValue modname, LuaValue env) {
 		LuaValue library = tableOf();
 		library.set("register", new registerMinigame());
@@ -29,8 +29,7 @@ public class Lua_Minigame extends TwoArgFunction {
 				if (_name.contains(" ")) {
 					throw new LuaError("Minigame name cannot contain a space");
 				}
-				minigames.globals.put(_name,
-						new HashMap<LuaValue, LuaValue>());
+				minigames.globals.put(_name, new HashMap<LuaValue, LuaValue>());
 				return new getMinigame().call(name);
 			} else {
 				throw new LuaError(String.format(
@@ -47,14 +46,14 @@ public class Lua_Minigame extends TwoArgFunction {
 				LuaValue functions = tableOf();
 				functions.set("getVar", new minigame_getVar(_name));
 				functions.set("setVar", new minigame_setVar(_name));
-				functions.set("clearVars",
-						new minigame_clearVars(_name));
-				functions.set("broadcast",
-						new minigame_broadcast(_name));
+				functions.set("clearVars", new minigame_clearVars(_name));
+				functions.set("broadcast", new minigame_broadcast(_name));
 				functions.set("print", new minigame_print(_name));
 				LuaValue eventFuncs = tableOf();
-				eventFuncs.set("OnCommand", new minigame_hookOnCommandEvent(_name));
-				eventFuncs.set("OnSignClick", new minigame_hookOnSignClickEvent(_name));
+				eventFuncs.set("OnCommand", new minigame_hookOnCommandEvent(
+						_name));
+				eventFuncs.set("OnSignClick",
+						new minigame_hookOnSignClickEvent(_name));
 				functions.set("hookEvent", eventFuncs);
 				return functions;
 			} else {
@@ -154,7 +153,7 @@ public class Lua_Minigame extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class minigame_hookOnCommandEvent extends OneArgFunction {
 		public String _minigame = null;
 
@@ -171,7 +170,7 @@ public class Lua_Minigame extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class minigame_hookOnSignClickEvent extends OneArgFunction {
 		public String _minigame = null;
 

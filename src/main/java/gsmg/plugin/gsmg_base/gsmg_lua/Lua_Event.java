@@ -30,7 +30,7 @@ public class Lua_Event extends TwoArgFunction {
 		library.set("unhook", unhook);
 		return library;
 	}
-	
+
 	public class HookPlayerJoinEvent extends TwoArgFunction {
 		public LuaValue call(LuaValue name, LuaValue func) throws LuaError {
 			if (func.isfunction()) {
@@ -41,7 +41,7 @@ public class Lua_Event extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class UnhookPlayerJoinEvent extends OneArgFunction {
 		public LuaValue call(LuaValue name) throws LuaError {
 			if (PlayerJoinEvent.containsKey(name)) {
@@ -52,7 +52,7 @@ public class Lua_Event extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class HookPlayerLeaveEvent extends TwoArgFunction {
 		public LuaValue call(LuaValue name, LuaValue func) throws LuaError {
 			if (func.isfunction()) {
@@ -63,7 +63,7 @@ public class Lua_Event extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class UnhookPlayerLeaveEvent extends OneArgFunction {
 		public LuaValue call(LuaValue name) throws LuaError {
 			if (PlayerLeaveEvent.containsKey(name)) {
@@ -74,7 +74,7 @@ public class Lua_Event extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class HookPlayerChatEvent extends TwoArgFunction {
 		public LuaValue call(LuaValue name, LuaValue func) throws LuaError {
 			if (func.isfunction()) {
@@ -85,7 +85,7 @@ public class Lua_Event extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class UnhookPlayerChatEvent extends OneArgFunction {
 		public LuaValue call(LuaValue name) throws LuaError {
 			if (PlayerChatEvent.containsKey(name)) {
@@ -96,7 +96,7 @@ public class Lua_Event extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class HookPlayerDeathEvent extends TwoArgFunction {
 		public LuaValue call(LuaValue name, LuaValue func) throws LuaError {
 			if (func.isfunction()) {
@@ -107,7 +107,7 @@ public class Lua_Event extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class UnhookPlayerDeathEvent extends OneArgFunction {
 		public LuaValue call(LuaValue name) throws LuaError {
 			if (PlayerDeathEvent.containsKey(name)) {
@@ -118,7 +118,7 @@ public class Lua_Event extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class HookPlayerRespawnEvent extends TwoArgFunction {
 		public LuaValue call(LuaValue name, LuaValue func) throws LuaError {
 			if (func.isfunction()) {
@@ -129,7 +129,7 @@ public class Lua_Event extends TwoArgFunction {
 			return LuaValue.NIL;
 		}
 	}
-	
+
 	public class UnhookPlayerRespawnEvent extends OneArgFunction {
 		public LuaValue call(LuaValue name) throws LuaError {
 			if (PlayerRespawnEvent.containsKey(name)) {

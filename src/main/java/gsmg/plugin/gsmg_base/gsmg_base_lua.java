@@ -23,10 +23,12 @@ public class gsmg_base_lua {
 				LuaValue.valueOf("plugins.GSMG_MiniGames.MiniGames."));
 		LuaValue classes = LuaValue.tableOf();
 		classes.set("base", LuaClassLoc + "Lua_Base");
-		classes.set("player", LuaClassLoc + "Lua_Player");
-		classes.set("location", LuaClassLoc + "Lua_Location");
+		classes.set("block", LuaClassLoc + "Lua_Block");
 		classes.set("event", LuaClassLoc + "Lua_Event");
+		classes.set("lobby", LuaClassLoc + "Lua_Lobby");
+		classes.set("location", LuaClassLoc + "Lua_Location");
 		classes.set("minigame", LuaClassLoc + "Lua_Minigame");
+		classes.set("player", LuaClassLoc + "Lua_Player");
 		globals.set("class", classes);
 		globals.set("print", new Lua_Base.PrintOut());
 		LuaFolders.clear();

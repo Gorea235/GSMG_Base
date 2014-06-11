@@ -84,7 +84,7 @@ public class Lua_Player extends TwoArgFunction {
 			}
 		}
 	}
-	
+
 	public class sendMessage extends TwoArgFunction {
 		public LuaValue call(LuaValue player, LuaValue msg) {
 			Player ply = Bukkit.getPlayer(player.tojstring());
@@ -114,19 +114,20 @@ public class Lua_Player extends TwoArgFunction {
 				return LuaValue.NIL;
 			}
 			LuaValue functions = tableOf();
-			functions.set("teleport", new teleport(player));
-			functions.set("teleportToPlayer", new teleportToPlayer(player));
-			functions.set("getLocation", new getLocation(player));
-			functions.set("exists", new exists(player));
-			functions.set("getName", new getName(player));
-			functions.set("sendMessage", new sendMessage(player));
+			functions.set("teleport", new player_teleport(player));
+			functions.set("teleportToPlayer", new player_teleportToPlayer(
+					player));
+			functions.set("getLocation", new player_getLocation(player));
+			functions.set("exists", new player_exists(player));
+			functions.set("getName", new player_getName(player));
+			functions.set("sendMessage", new player_sendMessage(player));
 			return functions;
 		}
 
-		private class exists extends ZeroArgFunction {
+		private class player_exists extends ZeroArgFunction {
 			public LuaValue _player = null;
 
-			public exists(LuaValue player) {
+			public player_exists(LuaValue player) {
 				this._player = player;
 			}
 
@@ -138,10 +139,10 @@ public class Lua_Player extends TwoArgFunction {
 			}
 		}
 
-		private class getName extends ZeroArgFunction {
+		private class player_getName extends ZeroArgFunction {
 			public LuaValue _player = null;
 
-			public getName(LuaValue player) {
+			public player_getName(LuaValue player) {
 				this._player = player;
 			}
 
@@ -151,10 +152,10 @@ public class Lua_Player extends TwoArgFunction {
 			}
 		}
 
-		private class teleport extends OneArgFunction {
+		private class player_teleport extends OneArgFunction {
 			public LuaValue _player = null;
 
-			public teleport(LuaValue player) {
+			public player_teleport(LuaValue player) {
 				this._player = player;
 			}
 
@@ -164,10 +165,10 @@ public class Lua_Player extends TwoArgFunction {
 			}
 		}
 
-		private class teleportToPlayer extends OneArgFunction {
+		private class player_teleportToPlayer extends OneArgFunction {
 			public LuaValue _player = null;
 
-			public teleportToPlayer(LuaValue player) {
+			public player_teleportToPlayer(LuaValue player) {
 				this._player = player;
 			}
 
@@ -177,10 +178,10 @@ public class Lua_Player extends TwoArgFunction {
 			}
 		}
 
-		private class getLocation extends ZeroArgFunction {
+		private class player_getLocation extends ZeroArgFunction {
 			public LuaValue _player = null;
 
-			public getLocation(LuaValue player) {
+			public player_getLocation(LuaValue player) {
 				this._player = player;
 			}
 
@@ -190,10 +191,10 @@ public class Lua_Player extends TwoArgFunction {
 			}
 		}
 
-		private class sendMessage extends OneArgFunction {
+		private class player_sendMessage extends OneArgFunction {
 			public LuaValue _player = null;
 
-			public sendMessage(LuaValue player) {
+			public player_sendMessage(LuaValue player) {
 				this._player = player;
 			}
 

@@ -81,11 +81,12 @@ public class gsmg_base_lobby {
 		}
 	}
 
-	public static void TeleportPlayerToLobby(Player player, String lobby) {
+	public static boolean TeleportPlayerToLobby(Player player, String lobby) {
 		if (LobbyList.containsKey(lobby)) {
 			player.teleport(LobbyList.get(lobby).location);
 			player.sendMessage(ChatColor.GREEN
 					+ String.format("Teleported to lobby '%s'", lobby));
+			return true;
 		} else {
 			gsmg_base_main
 					.Log(String
@@ -93,6 +94,7 @@ public class gsmg_base_lobby {
 									+ "Could not teleport player '%s' to lobby '%s' because it doesn't exists!",
 									player.getDisplayName(), lobby));
 		}
+		return false;
 	}
 
 	// lobby remove
