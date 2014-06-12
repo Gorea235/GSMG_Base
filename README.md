@@ -19,7 +19,7 @@ TODO List:
 - [ ] Lua Addon Loading
   - [x] Implement LuaJ to a stage where Lua files can be loaded and run with custom classes
   - [x] Work out what custom classes need to be built for the Lua
-  - [ ] Code the classes
+  - [x] Code the classes
   - [ ] Code the first addon
 - [ ] Build Lobbying System
   - [x] Work out how lobbying will work
