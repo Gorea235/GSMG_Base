@@ -29,3 +29,10 @@ public class gsmg_base_main extends JavaPlugin {
 		gsmg_base_lua.main();
 	}
 }
+
+public void loadConfigLobby(){
+     getConfig().options().copyDefaults(true);
+     saveConfig();
+     
+public void onEnable(){
+     loadConfigLobby();
