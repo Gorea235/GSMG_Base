@@ -3,7 +3,9 @@ package gsmg.plugin.gsmg_base.gsmg_lua;
 import gsmg.plugin.gsmg_base.gsmg_base_main;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.*;
 
@@ -16,6 +18,8 @@ public class Lua_Player extends TwoArgFunction {
 		library.set("exists", new exists());
 		library.set("getPlayer", new getPlayer());
 		library.set("sendMessgae", new sendMessage());
+		library.set("getPlayers", new getPlayers());
+		library.set("setGameMode", new setGameMode());
 		return library;
 	}
 
@@ -95,12 +99,41 @@ public class Lua_Player extends TwoArgFunction {
 			return LuaValue.FALSE;
 		}
 	}
+	
+	public class setGameMode extends TwoArgFunction {
+		public LuaValue call(LuaValue player, LuaValue mode) {
+			Player _player = Bukkit.getPlayer(player.tojstring());
+			if (_player != null) {
+				try {
+					GameMode _mode = GameMode.valueOf(mode.tojstring().toUpperCase());
+					_player.setGameMode(_mode);
+					return LuaValue.TRUE;
+				} catch (Exception ex) {
+					return LuaValue.FALSE;
+				}
+			}
+			return LuaValue.FALSE;
+		}
+	}
+	
+	public class getPlayers extends ZeroArgFunction {
+		public LuaValue call() {
+			LuaValue list = tableOf();
+			int i = 1;
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				list.set(i, p.getName());
+				i++;
+			}
+			return list;
+		}
+	}
 
 	public class getPlayer extends OneArgFunction {
 		private Lua_Player.teleport _teleport = new Lua_Player.teleport();
 		private Lua_Player.teleportToPlayer _teleportToPlayer = new Lua_Player.teleportToPlayer();
 		private Lua_Player.getLocation _getLocation = new Lua_Player.getLocation();
 		private Lua_Player.sendMessage _sendMessage = new Lua_Player.sendMessage();
+		private Lua_Player.setGameMode _setGameMode = new Lua_Player.setGameMode();
 
 		private void stillExists(LuaValue _player) throws LuaError {
 			if (Bukkit.getPlayer(_player.tojstring()) == null) {
@@ -121,6 +154,7 @@ public class Lua_Player extends TwoArgFunction {
 			functions.set("exists", new player_exists(player));
 			functions.set("getName", new player_getName(player));
 			functions.set("sendMessage", new player_sendMessage(player));
+			functions.set("setGameMode", new player_setGameMode(player));
 			return functions;
 		}
 
@@ -201,6 +235,19 @@ public class Lua_Player extends TwoArgFunction {
 			public LuaValue call(LuaValue msg) {
 				stillExists(this._player);
 				return _sendMessage.call(this._player, msg);
+			}
+		}
+		
+		private class player_setGameMode extends OneArgFunction {
+			public LuaValue _player = null;
+			
+			public player_setGameMode(LuaValue player) {
+				this._player = player;
+			}
+			
+			public LuaValue call(LuaValue mode) {
+				stillExists(_player);
+				return _setGameMode.call(this._player, mode);
 			}
 		}
 	}

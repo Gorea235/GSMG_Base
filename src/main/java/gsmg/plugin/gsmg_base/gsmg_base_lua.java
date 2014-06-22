@@ -29,6 +29,7 @@ public class gsmg_base_lua {
 		classes.set("location", LuaClassLoc + "Lua_Location");
 		classes.set("minigame", LuaClassLoc + "Lua_Minigame");
 		classes.set("player", LuaClassLoc + "Lua_Player");
+		classes.set("world", LuaClassLoc + "Lua_World");
 		globals.set("class", classes);
 		globals.set("print", new Lua_Base.PrintOut());
 		LuaFolders.clear();

@@ -2,7 +2,9 @@ package gsmg.plugin.gsmg_base;
 
 import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Minigame;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,12 +23,13 @@ public class gsmg_base_executor implements CommandExecutor {
 			String arg1 = args[0].toLowerCase();
 			if (arg1.equalsIgnoreCase("help")) {
 				sender.sendMessage("----GSMG Command List----");
-				sender.sendMessage("/GSMG Close (Minigame)");
+				sender.sendMessage("/GSMG close (Minigame)");
 				sender.sendMessage("/GSMG (Minigame) (Command)");
-				sender.sendMessage("/GSMG Start (Minigame)");
+				sender.sendMessage("/GSMG start (Minigame)");
 				sender.sendMessage("/GSMG reload");
 				sender.sendMessage("/GSMG reloadlua");
 				sender.sendMessage("/GSMG lobby (command) [name]");
+				sender.sendMessage("/GSMG world (name) [type]");
 			} else if (arg1.equalsIgnoreCase("close")) {
 
 			} else if (arg1.equalsIgnoreCase("start")) {
@@ -74,6 +77,113 @@ public class gsmg_base_executor implements CommandExecutor {
 				gsmg_base_main.Log("Reloading complete!");
 				if (isPlayer) {
 					sender.sendMessage("Reloaded Lua files...");
+				}
+			} else if (arg1.equalsIgnoreCase("world")) {
+				if (args.length >= 3) {
+					if (args[1].equalsIgnoreCase("create")
+							|| args[1].equalsIgnoreCase("load")) {
+						if (args.length >= 4) {
+							World.Environment env = World.Environment.NORMAL;
+							Long seed = null;
+							if (args[3].equalsIgnoreCase("nether")) {
+								env = World.Environment.NETHER;
+							} else if (args[3].equalsIgnoreCase("the_end")) {
+								env = World.Environment.THE_END;
+							} else if (!args[3].equalsIgnoreCase("normal")) {
+								sender.sendMessage(ChatColor.RED
+										+ "That world type does not exist! Available types: normal, nether, the_end");
+							}
+							if (args.length == 5)
+								seed = Long.parseLong(args[4]);
+							gsmg_base_world.create(args[2], env, seed);
+						} else {
+							gsmg_base_world.create(args[2],
+									World.Environment.NORMAL, null);
+						}
+						sender.sendMessage(ChatColor.DARK_GREEN
+								+ String.format(
+										"World '%s' was created/loaded",
+										args[2]));
+					} else if (args[1].equalsIgnoreCase("unload")) {
+						if (gsmg_base_world.unload(args[2])) {
+							sender.sendMessage(ChatColor.DARK_GREEN
+									+ String.format("World '%s' was unloaded",
+											args[2]));
+						} else {
+							sender.sendMessage(ChatColor.RED
+									+ "That world doesn't exist!");
+						}
+					} else if (args[1].equalsIgnoreCase("delete")) {
+						if (gsmg_base_world.delete(args[2])) {
+							sender.sendMessage(ChatColor.DARK_GREEN
+									+ String.format(
+											"World '%s' was successfully deleted",
+											args[2]));
+						} else {
+							sender.sendMessage(ChatColor.RED
+									+ String.format(
+											"World '%s' couldn't be deleted",
+											args[2]));
+						}
+					} else if (args[1].equalsIgnoreCase("tp")
+							|| args[1].equalsIgnoreCase("teleport")) {
+						if (isPlayer) {
+							World world = Bukkit.getWorld(args[2]);
+							if (world != null) {
+								gsmg_base_world.teleportPlayerTo(
+										(Player) sender, world);
+							} else {
+								sender.sendMessage(ChatColor.RED
+										+ String.format(
+												"World '%s' doesn't exist!",
+												args[2]));
+							}
+						} else {
+							if (args.length >= 4) {
+								World world = Bukkit.getWorld(args[3]);
+								Player player = Bukkit.getPlayer(args[2]);
+								if (world != null && player != null) {
+									gsmg_base_world.teleportPlayerTo(
+											(Player) sender, world);
+								} else {
+									sender.sendMessage(ChatColor.RED
+											+ "That world or player doesn't exist!");
+								}
+							} else {
+								sender.sendMessage(ChatColor.RED
+										+ "/GSMG world teleport (player) (world)");
+							}
+						}
+					} else {
+						sender.sendMessage(ChatColor.RED
+								+ "/GSMG world (create/unload/delete/teleport/list) (name) [type]");
+					}
+				} else {
+					if (args.length == 2) {
+						if (args[1].equalsIgnoreCase("list")) {
+							sender.sendMessage(ChatColor.GOLD + "World list:");
+							for (World w : Bukkit.getWorlds()) {
+								ChatColor env = ChatColor.AQUA;
+								if (w.getEnvironment() == World.Environment.NORMAL)
+									env = ChatColor.GREEN;
+								else if (w.getEnvironment() == World.Environment.NETHER)
+									env = ChatColor.RED;
+								else if (w.getEnvironment() == World.Environment.THE_END)
+									env = ChatColor.GRAY;
+								sender.sendMessage(String.format(
+										"%s%s%s, environment: %s%s",
+										ChatColor.GREEN, w.getName(),
+										ChatColor.WHITE, env, w
+												.getEnvironment().toString()));
+							}
+						} else {
+							sender.sendMessage(ChatColor.RED
+									+ "/GSMG world (create/unload/delete/teleport/list) (name) [type]");
+						}
+					} else {
+						sender.sendMessage(ChatColor.RED
+								+ "/GSMG world (create/unload/delete/teleport/list) (name) [type]");
+					}
 				}
 			} else {
 				if (arg1.equalsIgnoreCase("minigame")
