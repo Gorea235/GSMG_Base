@@ -31,6 +31,8 @@ public class gsmg_base_main extends JavaPlugin {
 }
 
 public void loadConfigLobby(){
+     string path = "GSMG_BASE.Lobby"
+     getConfig().addDefualt(path);
      getConfig().options().copyDefaults(true);
      saveConfig();
      
