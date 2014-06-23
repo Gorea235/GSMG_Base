@@ -20,8 +20,8 @@ public class Lua_Location extends TwoArgFunction {
 			Double x = null;
 			Double y = null;
 			Double z = null;
-			Float pitch = null;
 			Float yaw = null;
+			Float pitch = null;
 			if (args.isnoneornil(2)) {
 				if (Bukkit.getPlayer(args.arg(1).tojstring()) == null) {
 					throw new LuaError(String.format(
@@ -34,8 +34,8 @@ public class Lua_Location extends TwoArgFunction {
 				x = loc.getX();
 				y = loc.getY();
 				z = loc.getZ();
-				pitch = loc.getPitch();
 				yaw = loc.getYaw();
+				pitch = loc.getPitch();
 			} else {
 				if (!args.isnoneornil(4)) {
 					try {
@@ -57,8 +57,8 @@ public class Lua_Location extends TwoArgFunction {
 						throw new LuaError("Incorrect arguments!");
 					}
 					if (!args.isnoneornil(6)) {
-						pitch = Float.parseFloat(args.arg(5).tojstring());
 						yaw = Float.parseFloat(args.arg(6).tojstring());
+						pitch = Float.parseFloat(args.arg(5).tojstring());
 					}
 				} else {
 					throw new LuaError("Incorrect arguments!");
@@ -69,8 +69,8 @@ public class Lua_Location extends TwoArgFunction {
 			tbl.set("y", y);
 			tbl.set("z", z);
 			if (pitch != null && yaw != null) {
-				tbl.set("pitch", pitch);
 				tbl.set("yaw", yaw);
+				tbl.set("pitch", pitch);
 			}
 			return tbl;
 		}
@@ -83,8 +83,8 @@ public class Lua_Location extends TwoArgFunction {
 					Double.parseDouble(tbl.get("x").tojstring()),
 					Double.parseDouble(tbl.get("y").tojstring()),
 					Double.parseDouble(tbl.get("z").tojstring()),
-					Float.parseFloat(tbl.get("pitch").tojstring()),
-					Float.parseFloat(tbl.get("yaw").tojstring()));
+					Float.parseFloat(tbl.get("yaw").tojstring()),
+					Float.parseFloat(tbl.get("pitch").tojstring()));
 		} else {
 			loc = new Location(Bukkit.getWorld(tbl.get("world").tojstring()),
 					Double.parseDouble(tbl.get("x").tojstring()),
@@ -105,8 +105,8 @@ public class Lua_Location extends TwoArgFunction {
 		tbl.set("y", loc.getY());
 		tbl.set("z", loc.getZ());
 		if (pitch_yaw) {
-			tbl.set("pitch", loc.getPitch());
 			tbl.set("yaw", loc.getYaw());
+			tbl.set("pitch", loc.getPitch());
 		}
 		return tbl;
 	}

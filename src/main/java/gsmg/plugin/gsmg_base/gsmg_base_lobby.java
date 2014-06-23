@@ -21,6 +21,7 @@ public class gsmg_base_lobby {
 		if (!(LobbyList.size() > LobbyLimit)) {
 			if (!LobbyList.containsKey(name)) {
 				LobbyList.put(name, new Lobby(name, location));
+				gsmg_base_main.plugin.saveConfigLobby();
 				player.sendMessage(ChatColor.GREEN + "Lobby Created As: "
 						+ name);
 			} else {
@@ -35,6 +36,7 @@ public class gsmg_base_lobby {
 	public static void Remove(Player player, String lobby) {
 		if (LobbyList.containsKey(lobby)) {
 			LobbyList.remove(lobby);
+			gsmg_base_main.plugin.saveConfigLobby();
 			player.sendMessage(ChatColor.GREEN
 					+ String.format("Removed lobby '%s'", lobby));
 		} else {
@@ -48,6 +50,7 @@ public class gsmg_base_lobby {
 			Lobby toChange = LobbyList.get(lobby);
 			toChange.location = player.getLocation();
 			LobbyList.put(lobby, toChange);
+			gsmg_base_main.plugin.saveConfigLobby();
 			player.sendMessage(ChatColor.GREEN
 					+ String.format("Relocated lobby '%s'", lobby));
 		} else {
