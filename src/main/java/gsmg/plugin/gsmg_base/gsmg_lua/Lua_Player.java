@@ -5,7 +5,6 @@ import gsmg.plugin.gsmg_base.gsmg_base_main;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-
 import org.luaj.vm2.*;
 import org.luaj.vm2.lib.*;
 
@@ -126,6 +125,11 @@ public class Lua_Player extends TwoArgFunction {
 			}
 			return list;
 		}
+	}
+	
+	private getPlayer _getPlayer = new getPlayer();
+	public LuaValue externalGetPlayer(String name) {
+		return _getPlayer.call(LuaValue.valueOf(name));
 	}
 
 	public class getPlayer extends OneArgFunction {

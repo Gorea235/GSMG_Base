@@ -17,10 +17,12 @@ public class gsmg_base_lua {
 	static String LuaClassLoc = "gsmg.plugin.gsmg_base.gsmg_lua.";
 
 	public static void main() {
-		globals.set("IncludePath",
-				LuaValue.valueOf("plugins.GSMG_MiniGames.Includes."));
-		globals.set("MiniGamePath",
-				LuaValue.valueOf("plugins.GSMG_MiniGames.MiniGames."));
+		String sep = File.separator;
+		globals.set("IncludePath", LuaValue.valueOf(String.format(
+				"plugins%sGSMG_MiniGames%sIncludes%s", sep, sep, sep)));
+		globals.set("MiniGamePath", LuaValue.valueOf(String.format(
+				"plugins%sGSMG_MiniGames%sMiniGames%s", sep, sep, sep)));
+		globals.set("separator", LuaValue.valueOf(sep));
 		LuaValue classes = LuaValue.tableOf();
 		classes.set("base", LuaClassLoc + "Lua_Base");
 		classes.set("block", LuaClassLoc + "Lua_Block");
@@ -69,7 +71,7 @@ public class gsmg_base_lua {
 			}
 		}
 	}
-	
+
 	public static String toString(LuaValue var) {
 		return globals.get("tostring").call(var).tojstring();
 	}

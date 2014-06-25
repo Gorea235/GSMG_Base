@@ -1,6 +1,7 @@
 package gsmg.plugin.gsmg_base;
 
 import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Minigame;
+import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Player;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.luaj.vm2.LuaValue;
 
 public class gsmg_base_executor implements CommandExecutor {
+	private Lua_Player _Lua_Player = new Lua_Player();
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
@@ -37,19 +39,17 @@ public class gsmg_base_executor implements CommandExecutor {
 			} else if (arg1.equalsIgnoreCase("lobby")) {
 				if (isPlayer) {
 					if (args.length == 3) {
-						if (args[1].toLowerCase().equalsIgnoreCase("create")) {
+						if (args[1].equalsIgnoreCase("create")) {
 							gsmg_base_lobby.Create((Player) sender,
 									args[2].toLowerCase());
-						} else if (args[1].toLowerCase().equalsIgnoreCase(
-								"remove")) {
+						} else if (args[1].equalsIgnoreCase("remove")) {
 							gsmg_base_lobby.Remove((Player) sender,
 									args[2].toLowerCase());
-						} else if (args[1].toLowerCase().equalsIgnoreCase(
-								"teleport")) {
+						} else if (args[1].equalsIgnoreCase("teleport")
+								|| args[1].equalsIgnoreCase("tp")) {
 							gsmg_base_lobby.TeleportPlayerToLobby(
 									(Player) sender, args[2].toLowerCase());
-						} else if (args[1].toLowerCase().equalsIgnoreCase(
-								"relocate")) {
+						} else if (args[1].equalsIgnoreCase("relocate")) {
 							gsmg_base_lobby.Relocate((Player) sender,
 									args[2].toLowerCase());
 						} else {
@@ -57,7 +57,7 @@ public class gsmg_base_executor implements CommandExecutor {
 									+ "/GSMG lobby (create/remove/teleport) (name)");
 						}
 					} else if (args.length == 2) {
-						if (args[1].toLowerCase().equalsIgnoreCase("list")) {
+						if (args[1].equalsIgnoreCase("list")) {
 							gsmg_base_lobby.ListLobbys((Player) sender);
 						} else {
 							sender.sendMessage(ChatColor.RED
@@ -196,7 +196,7 @@ public class gsmg_base_executor implements CommandExecutor {
 							for (int i = 2; i < args.length; i++) {
 								varargs.set(i - 1, LuaValue.valueOf(args[i]));
 							}
-							hookedFunc.call(varargs);
+							hookedFunc.call(_Lua_Player.externalGetPlayer(sender.getName()), varargs);
 						}
 					} else if (args.length == 1) {
 						sender.sendMessage(ChatColor.RED
