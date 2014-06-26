@@ -81,7 +81,7 @@ public class Lua_Block extends TwoArgFunction {
 		}
 
 		public LuaValue call(LuaValue type) {
-			Material m = Material.getMaterial(type.tojstring());
+			Material m = Material.getMaterial(type.tojstring().toUpperCase());
 			if (m != null) {
 				this._block.setType(m);
 				return LuaValue.TRUE;

@@ -1,5 +1,5 @@
-function PrintTable ( tbl )
-  local level = 0
+function PrintTable ( tbl , level )
+  local level = level or 0
   local setSpaces = function (num, msg)
     pre = ""
     num = num - 1
@@ -12,7 +12,7 @@ function PrintTable ( tbl )
   level = level + 1
   for i, k in pairs(tbl) do
     if type(k) == "table" then
-      PrintTable(k)
+      PrintTable(k, level)
     else
       print(setSpaces(level, tostring(i).." = "..tostring(k)))
     end
@@ -55,4 +55,14 @@ end
 table.fromstring = function ( str )
   str = "return "..str
   return assert(load(str))()
+end
+
+function loadlibrary ( file )
+  lib = io.open( file )
+  if lib ~= nil then
+    chunk = lib:read("*a")
+    return assert(load(chunk))()
+  else
+    error("File '"..file.."' does not exists!")
+  end
 end
