@@ -37,14 +37,14 @@ table.tostring = function ( tbl )
     end
     local value = nil
     if type(v) == "string" then
-      value = v
+      value = "\""..v.."\""
     elseif type(v) == "number" or type(v) == "boolean" then
-      value = tostring(v)
+      value = "\""..tostring(v).."\""
     elseif type(v) == "table" then
       value = table.tostring(v)
     end
     if key ~= nil and value ~= nil then
-      str = str..comma.." [\""..key.."\"] = \""..value.."\""
+      str = str..comma.." [\""..key.."\"] = "..value
     end
     comma = ","
   end
