@@ -5,43 +5,78 @@ import org.luaj.vm2.lib.jse.*;
 
 import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Base;
 import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Minigame.minigames;
+import gsmg.plugin.gsmg_base.gsmg_lua.main_lua;
+import gsmg.plugin.gsmg_base.gsmg_base_main;
 
 import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class gsmg_base_lua {
 	static Globals globals = JsePlatform.standardGlobals();
 	static List<File> LuaFolders = new ArrayList<File>();
 	static List<File> QueuedLuaFiles = new ArrayList<File>();
-	static String LuaClassLoc = "gsmg.plugin.gsmg_base.gsmg_lua.";
+	final static String sep = File.separator;
+	static LuaValue classes;
 
+	@SuppressWarnings("unchecked")
 	public static void main() {
-		String sep = File.separator;
-		globals.set("IncludePath", LuaValue.valueOf(String.format(
-				"plugins%sGSMG_MiniGames%sIncludes%s", sep, sep, sep)));
-		globals.set("MiniGamePath", LuaValue.valueOf(String.format(
-				"plugins%sGSMG_MiniGames%sMiniGames%s", sep, sep, sep)));
+		// Extra Globals
+		globals.set("IncludePath", LuaValue.valueOf(gsmg_base_main.path(
+				"plugins", "GSMG_MiniGames", "Includes", "")));
+		globals.set("MiniGamePath", LuaValue.valueOf(gsmg_base_main.path(
+				"plugins", "GSMG_MiniGames", "MiniGames", "")));
 		globals.set("separator", LuaValue.valueOf(sep));
-		LuaValue classes = LuaValue.tableOf();
-		classes.set("base", LuaClassLoc + "Lua_Base");
-		classes.set("block", LuaClassLoc + "Lua_Block");
-		classes.set("event", LuaClassLoc + "Lua_Event");
-		classes.set("lobby", LuaClassLoc + "Lua_Lobby");
-		classes.set("location", LuaClassLoc + "Lua_Location");
-		classes.set("minigame", LuaClassLoc + "Lua_Minigame");
-		classes.set("player", LuaClassLoc + "Lua_Player");
-		classes.set("world", LuaClassLoc + "Lua_World");
-		globals.set("class", classes);
 		globals.set("print", new Lua_Base.PrintOut());
+		// Class Path Setup
+		classes = LuaValue.tableOf();
+		addClasses(new main_lua().getClasses());
+		// Addon Loader
+		ClassLoader loader = null;
+		Class<?> mainClass = null;
+		File addonFolder = new File(gsmg_base_main.path("plugins", "GSMG_Base",
+				"Addons"));
+		if (addonFolder.isDirectory()) {
+			for (File f : addonFolder.listFiles()) {
+				if (f.isFile()
+						&& f.getName().substring(f.getName().length() - 4)
+								.equalsIgnoreCase(".jar")) {
+					try {
+						URL[] urls = { f.toURI().toURL() };
+						loader = new URLClassLoader(urls);
+						mainClass = Class.forName("gsmg.addon.main_lua", true,
+								loader);
+						addClasses((HashMap<String, String>) mainClass
+								.getDeclaredMethod("getClasses").invoke(
+										mainClass.newInstance()));
+					} catch (Exception ex) {
+						gsmg_base_main
+								.Log(String
+										.format("An exception occured while trying to load addon '%s', message: %s\nStacktrace:",
+												f.getName(), ex.toString()));
+						ex.printStackTrace();
+					}
+				}
+			}
+		} else {
+			addonFolder.mkdir();
+		}
+		globals.set("class", classes);
+		// Lua Loading
 		LuaFolders.clear();
 		QueuedLuaFiles.clear();
 		minigames.globals.clear();
 		minigames.onCommandEvents.clear();
 		minigames.onSignClickEvents.clear();
-		LuaFolders.add(new File("plugins/GSMG_MiniGames"));
-		LuaFolders.add(new File("plugins/GSMG_MiniGames/MiniGames"));
-		LuaFolders.add(new File("plugins/GSMG_MiniGames/Includes"));
+		LuaFolders.add(new File(gsmg_base_main
+				.path("plugins", "GSMG_MiniGames")));
+		LuaFolders.add(new File(gsmg_base_main.path("plugins",
+				"GSMG_MiniGames", "MiniGames")));
+		LuaFolders.add(new File(gsmg_base_main.path("plugins",
+				"GSMG_MiniGames", "Includes")));
 		for (File f : LuaFolders) {
 			if (!f.isDirectory()) {
 				f.mkdir();
@@ -74,5 +109,24 @@ public class gsmg_base_lua {
 
 	public static String toString(LuaValue var) {
 		return globals.get("tostring").call(var).tojstring();
+	}
+
+	public static void addClasses(HashMap<String, String> c) {
+		String v;
+		for (String k : c.keySet()) {
+			v = c.get(k);
+			if (classes.get(k) == LuaValue.NIL) {
+				classes.set(k, v);
+				gsmg_base_main
+						.Log(String
+								.format("Added class path '%s' to the class path table under index '%s'",
+										v, k));
+			} else {
+				gsmg_base_main
+						.Log(String
+								.format("Could not add class path '%s' to the class path table, as an index with name '%s' already exists",
+										v, k));
+			}
+		}
 	}
 }

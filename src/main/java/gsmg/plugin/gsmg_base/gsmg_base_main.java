@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class gsmg_base_main extends JavaPlugin {
+	public static final String sep = File.separator;
 	public static String pluginPrefix = "[GSMG] ";
 	public static gsmg_base_main plugin;
 
@@ -32,11 +33,21 @@ public class gsmg_base_main extends JavaPlugin {
 		Bukkit.getLogger().info(toLog);
 	}
 
+	public static String path(String... strings) {
+		String _path = "";
+		String _sep = "";
+		for (String s : strings) {
+			_path = _path + _sep + s;
+			_sep = sep;
+		}
+		return _path;
+	}
+
 	public void loadConfigLobby() {
 		reloadConfig();
 		getConfig().options().copyDefaults(true);
-		if (new File(getDataFolder().getAbsolutePath() + File.separator
-				+ "config.yml").isFile()) {
+		if (new File(getDataFolder().getAbsolutePath() + sep + "config.yml")
+				.isFile()) {
 			List<String> lobbys = getConfig().getStringList("lobbylist");
 			FileConfiguration config = getConfig();
 			for (String l : lobbys) {
@@ -48,9 +59,10 @@ public class gsmg_base_main extends JavaPlugin {
 								.getDouble("lobbys." + l + ".x"), config
 								.getDouble("lobbys." + l + ".y"), config
 								.getDouble("lobbys." + l + ".z"),
+								(float) config
+										.getDouble("lobbys." + l + ".yaw"),
 								(float) config.getDouble("lobbys." + l
-										+ ".yaw"), (float) config
-										.getDouble("lobbys." + l + ".pitch"))));
+										+ ".pitch"))));
 			}
 		} else {
 			saveConfig();
@@ -61,7 +73,7 @@ public class gsmg_base_main extends JavaPlugin {
 		saveConfig();
 		try {
 			PrintWriter writer = new PrintWriter(getDataFolder()
-					.getAbsolutePath() + File.separator + "config.yml");
+					.getAbsolutePath() + sep + "config.yml");
 			writer.write("");
 			writer.close();
 		} catch (FileNotFoundException e) {
