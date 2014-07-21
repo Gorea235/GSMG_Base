@@ -9,6 +9,8 @@ public class main_lua {
 		HashMap<String, String> classes = new HashMap<String, String>();
 		classes.put("base", LuaClassLoc + "Lua_Base");
 		classes.put("block", LuaClassLoc + "Lua_Block");
+		classes.put("chatcolors", LuaClassLoc + "Lua_ChatColor");
+		classes.put("chatcolours", LuaClassLoc + "Lua_ChatColor");
 		classes.put("event", LuaClassLoc + "Lua_Event");
 		classes.put("lobby", LuaClassLoc + "Lua_Lobby");
 		classes.put("location", LuaClassLoc + "Lua_Location");

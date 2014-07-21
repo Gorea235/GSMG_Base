@@ -14,6 +14,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class gsmg_base_lua {
 	static Globals globals = JsePlatform.standardGlobals();
@@ -82,10 +83,26 @@ public class gsmg_base_lua {
 				f.mkdir();
 			}
 		}
-		GetLuaFilesToRun("plugins/GSMG_MiniGames");
+		// Getting all Lua files in base Lua directory
+		String mainLuaDir = "plugins/GSMG_MiniGames";
+		for (String f : new File(mainLuaDir).list()) {
+			if (f.substring(f.length() - 4).equals(".lua")) {
+				QueuedLuaFiles.add(new File(mainLuaDir + "/" + f));
+			}
+		}
+		// Getting all minigame main Lua files in minigame folders (only runs
+		// the file that has the same name as the directory it is in, ignoring
+		// case of course)
 		for (String d : new File("plugins/GSMG_MiniGames/MiniGames").list()) {
 			if (new File("plugins/GSMG_MiniGames/MiniGames/" + d).isDirectory()) {
-				GetLuaFilesToRun("plugins/GSMG_MiniGames/MiniGames/" + d);
+				mainLuaDir = "plugins/GSMG_MiniGames/MiniGames/" + d;
+				for (String f : new File(mainLuaDir).list()) {
+					if (f.substring(f.length() - 4).equals(".lua")
+							&& f.substring(0, f.length() - 4).equalsIgnoreCase(
+									d)) {
+						QueuedLuaFiles.add(new File(mainLuaDir + "/" + f));
+					}
+				}
 			}
 		}
 		for (File f : QueuedLuaFiles) {
@@ -99,22 +116,16 @@ public class gsmg_base_lua {
 		}
 	}
 
-	public static void GetLuaFilesToRun(String dir) {
-		for (String f : new File(dir).list()) {
-			if (f.substring(f.length() - 4).equals(".lua")) {
-				QueuedLuaFiles.add(new File(dir + "/" + f));
-			}
-		}
-	}
-
 	public static String toString(LuaValue var) {
 		return globals.get("tostring").call(var).tojstring();
 	}
 
 	public static void addClasses(HashMap<String, String> c) {
+		String k;
 		String v;
-		for (String k : c.keySet()) {
-			v = c.get(k);
+		for (Map.Entry<String, String> entry : c.entrySet()) {
+			k = entry.getKey();
+			v = entry.getValue();
 			if (classes.get(k) == LuaValue.NIL) {
 				classes.set(k, v);
 				gsmg_base_main

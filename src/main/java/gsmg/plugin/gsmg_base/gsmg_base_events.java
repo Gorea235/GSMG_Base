@@ -1,9 +1,14 @@
 package gsmg.plugin.gsmg_base;
 
+import java.util.Map;
+import java.util.logging.Level;
+
 import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Event;
+import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Event.EventEnums;
 import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Minigame;
 import gsmg.plugin.gsmg_base.gsmg_lua.Lua_Player;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.*;
@@ -12,10 +17,10 @@ import org.bukkit.event.*;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
-import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.*;
 
 public class gsmg_base_events implements Listener {
-	private Lua_Player _Lua_Player = new Lua_Player();
+	private static Lua_Player _Lua_Player = new Lua_Player();
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
@@ -70,43 +75,124 @@ public class gsmg_base_events implements Listener {
 		}
 	}
 
+	private static void printEventHandleError(
+			Map.Entry<LuaValue, LuaValue> handler, Event event, LuaError err) {
+		printEventHandleError(handler, event.getEventName(), err);
+	}
+
+	private static void printEventHandleError(
+			Map.Entry<LuaValue, LuaValue> handler, String eventName,
+			LuaError err) {
+		gsmg_base_main.logger.log(Level.WARNING, String.format(
+				"The handler '%s' for event '%s' has caused an error: %s",
+				handler.getKey().tojstring(), eventName, err.getMessage()));
+	}
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		String name = event.getPlayer().getName();
-		for (LuaValue func : Lua_Event.PlayerJoinEvent.values()) {
-			func.call(_Lua_Player.externalGetPlayer(name));
+		for (Map.Entry<LuaValue, LuaValue> handler : Lua_Event.events.get(
+				EventEnums.PlayerJoinEvent).entrySet()) {
+			try {
+				handler.getValue().call(_Lua_Player.externalGetPlayer(name));
+			} catch (LuaError err) {
+				printEventHandleError(handler, event, err);
+			}
 		}
 	}
 
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event) {
 		String name = event.getPlayer().getName();
-		for (LuaValue func : Lua_Event.PlayerLeaveEvent.values()) {
-			func.call(_Lua_Player.externalGetPlayer(name));
+		for (Map.Entry<LuaValue, LuaValue> handler : Lua_Event.events.get(
+				EventEnums.PlayerLeaveEvent).entrySet()) {
+			try {
+				handler.getValue().call(_Lua_Player.externalGetPlayer(name));
+			} catch (LuaError err) {
+				printEventHandleError(handler, event, err);
+			}
 		}
 	}
 
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		String name = event.getPlayer().getName();
-		for (LuaValue func : Lua_Event.PlayerChatEvent.values()) {
-			func.call(_Lua_Player.externalGetPlayer(name));
+		LuaValue msg = LuaValue.valueOf(event.getMessage());
+		LuaValue format = LuaValue.valueOf(event.getFormat());
+		Varargs args;
+		for (Map.Entry<LuaValue, LuaValue> handler : Lua_Event.events.get(
+				EventEnums.PlayerChatEvent).entrySet()) {
+			try {
+				args = handler.getValue().call(
+						_Lua_Player.externalGetPlayer(name), msg, format);
+				if (args.isnoneornil(1)) {
+					gsmg_base_main.logger
+							.log(Level.WARNING,
+									String.format(
+											"The format return was missing, ignoring ChatEvent handler %s",
+											handler.getKey()));
+				} else {
+					format = args.arg1();
+				}
+			} catch (LuaError err) {
+				printEventHandleError(handler, event, err);
+			}
 		}
+		event.setMessage(msg.tojstring());
+		event.setFormat(format.tojstring());
 	}
 
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		String name = event.getEntity().getName();
-		for (LuaValue func : Lua_Event.PlayerDeathEvent.values()) {
-			func.call(_Lua_Player.externalGetPlayer(name));
+		for (Map.Entry<LuaValue, LuaValue> handler : Lua_Event.events.get(
+				EventEnums.PlayerDeathEvent).entrySet()) {
+			try {
+				handler.getValue().call(_Lua_Player.externalGetPlayer(name));
+			} catch (LuaError err) {
+				printEventHandleError(handler, event, err);
+			}
 		}
 	}
 
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		String name = event.getPlayer().getName();
-		for (LuaValue func : Lua_Event.PlayerRespawnEvent.values()) {
-			func.call(_Lua_Player.externalGetPlayer(name));
+		final PlayerRespawnEvent _event = event;
+		Bukkit.getScheduler().runTaskLater(gsmg_base_main.plugin,
+				new Runnable() {
+
+					@Override
+					public void run() {
+						String name = _event.getPlayer().getName();
+						for (Map.Entry<LuaValue, LuaValue> handler : Lua_Event.events
+								.get(EventEnums.PlayerRespawnEvent).entrySet()) {
+							try {
+								handler.getValue().call(
+										_Lua_Player.externalGetPlayer(name));
+							} catch (LuaError err) {
+								printEventHandleError(handler, _event, err);
+							}
+						}
+					}
+				}, 1);
+	}
+
+	public static void CallShutdownEvent() {
+		try {
+			for (Map.Entry<LuaValue, LuaValue> handler : Lua_Event.events.get(
+					EventEnums.ShutdownEvent).entrySet()) {
+				try {
+					handler.getValue().call();
+				} catch (LuaError err) {
+					printEventHandleError(handler, "Shutdown Event", err);
+				}
+			}
+		} catch (Exception ex) {
+			gsmg_base_main.logger
+					.log(Level.WARNING,
+							String.format(
+									"An exception occured while trying to fire shutdown event, reason: %s",
+									ex.getLocalizedMessage()));
 		}
 	}
 }

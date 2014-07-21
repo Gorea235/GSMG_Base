@@ -72,12 +72,16 @@ public class gsmg_base_executor implements CommandExecutor {
 				}
 
 			} else if (arg1.equalsIgnoreCase("reloadlua")) {
+				gsmg_base_events.CallShutdownEvent();
 				gsmg_base_main.Log("Reloading Lua files...");
 				gsmg_base_lua.main();
 				gsmg_base_main.Log("Reloading complete!");
 				if (isPlayer) {
 					sender.sendMessage("Reloaded Lua files...");
 				}
+			} else if (arg1.equalsIgnoreCase("reload")) {
+				gsmg_base_events.CallShutdownEvent();
+				gsmg_base_main.plugin.mainLoad();
 			} else if (arg1.equalsIgnoreCase("world")) {
 				if (args.length >= 3) {
 					if (args[1].equalsIgnoreCase("create")

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import gsmg.plugin.gsmg_base.gsmg_base_lobby;
 
@@ -15,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class gsmg_base_main extends JavaPlugin {
 	public static final String sep = File.separator;
+	public static Logger logger;
 	public static String pluginPrefix = "[GSMG] ";
 	public static gsmg_base_main plugin;
 
@@ -30,7 +32,7 @@ public class gsmg_base_main extends JavaPlugin {
 		if (!noPrefix) {
 			toLog = pluginPrefix + toLog;
 		}
-		Bukkit.getLogger().info(toLog);
+		logger.info(toLog);
 	}
 
 	public static String path(String... strings) {
@@ -97,16 +99,23 @@ public class gsmg_base_main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		plugin = this;
+		logger = Bukkit.getLogger();
 		getServer().getPluginManager().registerEvents(new gsmg_base_events(),
 				this);
 		getCommand("gsmg").setExecutor(new gsmg_base_executor());
 		Log("Luaj Version: " + org.luaj.vm2.Lua._VERSION);
+		mainLoad();
+	}
+	
+	public void mainLoad() {
 		gsmg_base_lua.main();
 		loadConfigLobby();
 	}
 
 	@Override
 	public void onDisable() {
+		gsmg_base_events.CallShutdownEvent();
 		plugin = null;
+		logger = null;
 	}
 }

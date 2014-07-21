@@ -13,8 +13,8 @@ TODO List:
 
 - [ ] Commands
   - [x] Write up command list
-  - [ ] Implement Empty Command Functions
-  - [ ] Work out how each command will work
+  - [x] Implement Empty Command Functions
+  - [x] Work out how each command will work
   - [ ] Code the commands
 - [ ] Lua Addon Loading
   - [x] Implement LuaJ to a stage where Lua files can be loaded and run with custom classes
@@ -24,8 +24,8 @@ TODO List:
 - [ ] Build Lobbying System
   - [x] Work out how lobbying will work
   - [x] Code initial lobbying system
-  - [ ] Test it, see if changes need to be made
-  - [ ] Create classes for the Lua custom classes to use
+  - [x] Test it, see if changes need to be made
+  - [x] Create classes for the Lua custom classes to use
 
 Command List:
 
