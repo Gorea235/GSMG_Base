@@ -1,3 +1,4 @@
+**Discontinued due to bukkit being discontinued and lack of (our) development interest**
 GSMG_Base
 =========
 
